@@ -19,6 +19,7 @@ export default async function SiteHeader() {
                             <span className="text-sm">Hi, {user.firstName ?? "there"}!</span>
                             {/* in SiteHeader nav */}
                             <Link href="/dashboard/accounts" className="text-sm hover:underline">Accounts</Link>
+                            <Link href="/dashboard/transactions" className="text-sm hover:underline">Transactions</Link>
                             <Link href="/dashboard" className="text-sm underline">
                                 Dashboard
                             </Link>
