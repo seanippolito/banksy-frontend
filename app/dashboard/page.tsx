@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
+import MeWidget from "@/components/me-widget"
 
 export default async function DashboardPage() {
     const { userId } = await auth();
@@ -21,6 +22,7 @@ export default async function DashboardPage() {
             <p className="text-sm text-gray-600 mt-2">
                 Welcome to your Banksy dashboard.
             </p>
+            <MeWidget/>
         </main>
     );
 }
