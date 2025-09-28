@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
+import CustomUserButton from "@/components/custom-user-menu";
 import {auth, currentUser} from "@clerk/nextjs/server";
 
 export default async function SiteHeader() {
@@ -20,9 +20,7 @@ export default async function SiteHeader() {
                             <Link href="/dashboard" className="text-sm underline">
                                 Dashboard
                             </Link>
-                            <UserButton
-                                afterSignOutUrl="/"
-                            />
+                            <CustomUserButton/>
                         </>
                     ) : (
                         <>
