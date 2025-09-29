@@ -37,7 +37,7 @@ export default function TransactionsPage() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 account_id: accountId,
-                amount_cents: cents,
+                amount: cents,
                 type,
                 description: desc || null,
             }),
