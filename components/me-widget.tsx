@@ -6,7 +6,7 @@ import { useApi } from "@/lib/api";
 export default function MeWidget() {
     const { request } = useApi();
     const { data, error, isLoading } = useSWR(
-        "/api/v1/me",
+        "/api/v1/users/me",
         (key) => request(key),
         {
             revalidateOnFocus: false,
