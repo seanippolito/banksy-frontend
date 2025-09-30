@@ -77,7 +77,7 @@ export default function MoneyTransferPage() {
             setDesc("");
             setSender("");
             setRecipient("");
-        } catch (err: any) {
+        } catch (err: string | unknown) {
             setErrorMsg("Transfer failed. Please try again.");
             console.error(err);
         } finally {

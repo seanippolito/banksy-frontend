@@ -21,11 +21,6 @@ export default function ErrorReportingPage() {
         { revalidateOnFocus: false }
     );
 
-    const formatStacktrace = (msg: string) => {
-        const lines = msg.split("\n");
-        return lines.slice(-5).join("\n"); // last 5 lines only
-    };
-
     return (
         <main className="p-6 space-y-6">
             <div className="flex items-center justify-between">

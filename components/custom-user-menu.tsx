@@ -2,6 +2,7 @@
 
 import { SignedIn, SignOutButton, useUser } from "@clerk/nextjs";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function CustomUserMenu() {
     const { user } = useUser();
@@ -16,7 +17,7 @@ export default function CustomUserMenu() {
                     aria-haspopup="menu"
                     aria-expanded={open}
                 >
-                    <img
+                    <Image
                         src={user?.imageUrl ?? "/avatar.svg"}
                         alt="Profile"
                         className="h-8 w-8 rounded-full"

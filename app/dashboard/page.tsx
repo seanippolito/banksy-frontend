@@ -4,6 +4,7 @@ import { useApi } from "@/lib/api";
 import useSWR from "swr";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 
 type Account = {
     id: number;
@@ -87,7 +88,7 @@ export default function DashboardPage() {
             <section>
                 <h2 className="text-lg font-medium mb-3">Your Profile</h2>
                 <div className="border rounded-xl p-4 bg-white shadow-sm flex items-center gap-4">
-                    <img
+                    <Image
                         src={user.imageUrl}
                         alt="avatar"
                         className="w-16 h-16 rounded-full border"

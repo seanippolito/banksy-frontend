@@ -51,7 +51,7 @@ export default function AccountDetailPage() {
     const { id } = useParams<{ id: string }>(); // account id from URL
     const { request } = useApi();
 
-    const { data: user, error: userError } = useSWR<User>(
+    const { data: user } = useSWR<User>(
         "/api/v1/users/me",
         (key) => request(key),
         {
