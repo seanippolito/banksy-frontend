@@ -40,6 +40,13 @@ type Card = {
     status: string;
 };
 
+type Holder = {
+    id: number;
+    user_id: number;
+    account_id: number;
+    holder_type: string;
+};
+
 export default function AccountDetailPage() {
     const { id } = useParams<{ id: string }>(); // account id from URL
     const { request } = useApi();
@@ -60,7 +67,7 @@ export default function AccountDetailPage() {
         { revalidateOnFocus: false }
     );
 
-    const { data: txs, isLoading, mutate: mutateTxs } = useSWR<Tx[]>(
+    const { data: txs, mutate: mutateTxs } = useSWR<Tx[]>(
         id ? `/api/v1/transactions?account_id=${id}` : null,
         (k) => request(k),
         { revalidateOnFocus: false }
@@ -69,6 +76,12 @@ export default function AccountDetailPage() {
     const { data: cards, mutate: mutateCards } = useSWR<Card[]>(
         `/api/v1/cards?account_id=${id}`,
         (k) => request(k),
+        { revalidateOnFocus: false }
+    );
+
+    const { data: holders, mutate, isLoading, error } = useSWR<Holder[]>(
+        id ? `/api/v1/account-holders/${id}/holders` : null,
+        (key) => request<Holder[]>(key),
         { revalidateOnFocus: false }
     );
 
@@ -111,6 +124,46 @@ export default function AccountDetailPage() {
         }
     };
 
+    const [holderType, setHolderType] = useState("JOINT");
+    const [userId, setUserId] = useState("");
+    const [saving, setSaving] = useState(false);
+
+    const onAddHolder = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!userId) return;
+        setSaving(true);
+        try {
+            await request(`/api/v1/account-holders/${id}/holders`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    user_id: userId,
+                    account_id: account?.id,
+                    holder_type: holderType,
+                }),
+            });
+            setUserId("");
+            setHolderType("JOINT");
+            mutate();
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const onRemoveHolder = async (holderId: number) => {
+        if (!confirm("Remove this account holder?")) return;
+        try {
+            await request(`/api/v1/account-holders/holders/${holderId}`, {
+                method: "DELETE",
+            });
+            mutate();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     if (accError) return <div className="p-6 text-red-600">Account not found.</div>;
 
     return (
@@ -118,6 +171,14 @@ export default function AccountDetailPage() {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold">{account?.name || "Account"}</h1>
+                <div className="flex gap-3 mt-4">
+                    <Link
+                        href={`/dashboard/statements?account_id=${account?.id}`}
+                        className="rounded-lg border px-4 py-2 text-sm hover:bg-gray-50"
+                    >
+                        View Statements
+                    </Link>
+                </div>
                 <Link
                     href="/dashboard/accounts"
                     className="text-sm font-medium text-blue-600 hover:underline"
@@ -138,6 +199,61 @@ export default function AccountDetailPage() {
                 </div>
             )}
 
+            <section className="space-y-4 mt-8">
+                <h2 className="text-lg font-semibold">Account Holders</h2>
+
+                <form onSubmit={onAddHolder} className="flex flex-wrap items-center gap-2">
+                    <input
+                        value={userId}
+                        onChange={(e) => setUserId(e.target.value)}
+                        placeholder="User ID"
+                        className="border rounded-lg px-3 py-2 text-sm"
+                    />
+                    <select
+                        value={holderType}
+                        onChange={(e) => setHolderType(e.target.value)}
+                        className="border rounded-lg px-3 py-2 text-sm"
+                    >
+                        <option value="PRIMARY">PRIMARY</option>
+                        <option value="JOINT">JOINT</option>
+                        <option value="TRUST">TRUST</option>
+                        <option value="BUSINESS">BUSINESS</option>
+                        <option value="OTHER">OTHER</option>
+                    </select>
+                    <button
+                        disabled={saving || !userId}
+                        className="rounded-lg px-3 py-2 border text-sm hover:bg-gray-50 disabled:opacity-50"
+                    >
+                        {saving ? "Adding…" : "Add Holder"}
+                    </button>
+                </form>
+
+                {isLoading && <div className="text-sm text-gray-500">Loading holders…</div>}
+                {error && (
+                    <div className="text-sm text-red-600">Failed to load account holders</div>
+                )}
+
+                <ul className="space-y-2">
+                    {holders?.map((h) => (
+                        <li
+                            key={h.id}
+                            className="border rounded-lg p-3 flex items-center justify-between"
+                        >
+                            <div>
+                                <div className="font-medium">User #{h.user_id}</div>
+                                <div className="text-xs text-gray-600">{h.holder_type}</div>
+                            </div>
+                            <button
+                                onClick={() => onRemoveHolder(h.id)}
+                                className="text-sm text-red-600 hover:underline"
+                            >
+                                Remove
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+
             <div className="flex justify-between items-center">
                 <h2 className="text-lg font-medium">Cards</h2>
                 <button
@@ -150,9 +266,7 @@ export default function AccountDetailPage() {
             </div>
 
             <ul className="space-y-3">
-                {cards?
-                    .filter((c) => (c.account_id === account?.id))
-                    .map((c) => (
+                {cards?.filter((c) => (c.account_id === account?.id)).map((c) => (
                     <li key={c.id} className="border rounded-lg p-3 shadow-sm flex justify-between">
                         <div>
                             <div className="font-medium">**** **** **** {c.card_number_last4}</div>
@@ -165,7 +279,7 @@ export default function AccountDetailPage() {
                             <div className="text-s text-gray-500">{user?.first_name} {user?.last_name}</div>
                         </div>
                     </li>
-                    ))}
+                ))}
                 {cards?.length === 0 && (
                     <li className="text-sm text-gray-500">No cards issued yet.</li>
                 )}

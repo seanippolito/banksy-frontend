@@ -20,10 +20,9 @@ export default async function SiteHeader() {
                             {/* in SiteHeader nav */}
                             <Link href="/dashboard/accounts" className="text-sm hover:underline">Accounts</Link>
                             <Link href="/dashboard/transactions" className="text-sm hover:underline">Transactions</Link>
+                            <Link href="/dashboard/statements" className="text-sm hover:underline">Statements</Link>
                             <Link href="/dashboard/error-reporting" className="text-sm hover:underline">Errors</Link>
-                            <Link href="/dashboard" className="text-sm underline">
-                                Dashboard
-                            </Link>
+                            <Link href="/dashboard" className="text-sm underline">Dashboard</Link>
                             <CustomUserButton/>
                         </>
                     ) : (
