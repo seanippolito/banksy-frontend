@@ -6,8 +6,16 @@ import { useApi } from "@/lib/api";
 import Link from "next/link";
 import { useState } from "react";
 
+type User = {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+};
+
 type Account = {
     id: number;
+    user_id: number;
     name: string;
     currency: string;
     created_at: string;
@@ -22,9 +30,29 @@ type Tx = {
     created_at: string;
 };
 
+type Card = {
+    id: number;
+    account_id: number;
+    card_number_last4: string;
+    card_type: string;
+    expiration_month: number;
+    expiration_year: number;
+    status: string;
+};
+
 export default function AccountDetailPage() {
-    const { id } = useParams(); // account id from URL
+    const { id } = useParams<{ id: string }>(); // account id from URL
     const { request } = useApi();
+
+    const { data: user, error: userError } = useSWR<User>(
+        "/api/v1/users/me",
+        (key) => request(key),
+        {
+            revalidateOnFocus: false,
+            dedupingInterval: 60_000,   // 1min: identical requests are coalesced
+            shouldRetryOnError: false,
+        }
+    );
 
     const { data: account, error: accError } = useSWR<Account>(
         id ? `/api/v1/accounts/${id}` : null,
@@ -32,8 +60,14 @@ export default function AccountDetailPage() {
         { revalidateOnFocus: false }
     );
 
-    const { data: txs, isLoading, mutate } = useSWR<Tx[]>(
+    const { data: txs, isLoading, mutate: mutateTxs } = useSWR<Tx[]>(
         id ? `/api/v1/transactions?account_id=${id}` : null,
+        (k) => request(k),
+        { revalidateOnFocus: false }
+    );
+
+    const { data: cards, mutate: mutateCards } = useSWR<Card[]>(
+        `/api/v1/cards?account_id=${id}`,
         (k) => request(k),
         { revalidateOnFocus: false }
     );
@@ -42,6 +76,7 @@ export default function AccountDetailPage() {
     const [type, setType] = useState<"DEBIT" | "CREDIT">("DEBIT");
     const [amount, setAmount] = useState("");
     const [desc, setDesc] = useState("");
+    const [shipping, setShipping] = useState(false);
 
     const submit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -60,7 +95,20 @@ export default function AccountDetailPage() {
         });
         setAmount("");
         setDesc("");
-        mutate();
+        mutateTxs();
+    };
+
+    const shipCard = async () => {
+        setShipping(true);
+        try {
+            await request<Card>(`/api/v1/cards/ship/${id}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+            });
+            mutateCards();
+        } finally {
+            setShipping(false);
+        }
     };
 
     if (accError) return <div className="p-6 text-red-600">Account not found.</div>;
@@ -71,7 +119,7 @@ export default function AccountDetailPage() {
             <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold">{account?.name || "Account"}</h1>
                 <Link
-                    href="/accounts"
+                    href="/dashboard/accounts"
                     className="text-sm font-medium text-blue-600 hover:underline"
                 >
                     Back to Accounts
@@ -89,6 +137,39 @@ export default function AccountDetailPage() {
                     </p>
                 </div>
             )}
+
+            <div className="flex justify-between items-center">
+                <h2 className="text-lg font-medium">Cards</h2>
+                <button
+                    disabled={shipping}
+                    onClick={shipCard}
+                    className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                >
+                    {shipping ? "Shipping…" : "Ship Card"}
+                </button>
+            </div>
+
+            <ul className="space-y-3">
+                {cards?
+                    .filter((c) => (c.account_id === account?.id))
+                    .map((c) => (
+                    <li key={c.id} className="border rounded-lg p-3 shadow-sm flex justify-between">
+                        <div>
+                            <div className="font-medium">**** **** **** {c.card_number_last4}</div>
+                            <div className="text-xs text-gray-600">
+                                Expires {c.expiration_month}/{c.expiration_year}
+                            </div>
+                        </div>
+                        <div>
+                            <div className="text-xs text-gray-500">{account?.name}</div>
+                            <div className="text-s text-gray-500">{user?.first_name} {user?.last_name}</div>
+                        </div>
+                    </li>
+                    ))}
+                {cards?.length === 0 && (
+                    <li className="text-sm text-gray-500">No cards issued yet.</li>
+                )}
+            </ul>
 
             {/* Add Transaction Form */}
             <form

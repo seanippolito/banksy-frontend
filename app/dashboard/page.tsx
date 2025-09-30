@@ -2,7 +2,7 @@
 
 import { useApi } from "@/lib/api";
 import useSWR from "swr";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
 type Account = {
