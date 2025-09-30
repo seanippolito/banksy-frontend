@@ -36,6 +36,7 @@ export default function AccountsPage() {
                 body: JSON.stringify({ name, currency }),
             });
             setName("");
+            setCurrency("USD");
             mutate(); // refresh list
         } catch (e) {
             console.error(e);
@@ -45,48 +46,89 @@ export default function AccountsPage() {
     };
 
     return (
-        <main className="p-6 space-y-6">
+        <main className="p-6 space-y-8">
+            {/* Header */}
             <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-semibold">Accounts</h1>
-                <Link href="/dashboard" className="text-sm underline">
+                <h1 className="text-3xl font-bold tracking-tight">Accounts</h1>
+                <Link
+                    href="/dashboard"
+                    className="text-sm font-medium text-blue-600 hover:underline"
+                >
                     Back to Dashboard
                 </Link>
             </div>
 
-            <form onSubmit={onCreate} className="flex items-center gap-2">
+            {/* Create Account Form */}
+            <form
+                onSubmit={onCreate}
+                className="flex flex-wrap items-center gap-3 bg-gray-50 p-4 rounded-lg border"
+            >
                 <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Account name"
-                    className="border rounded-lg px-3 py-2 text-sm"
+                    className="flex-1 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
                 />
-                <input
+                <select
                     value={currency}
-                    onChange={(e) => setCurrency(e.target.value.toUpperCase())}
-                    placeholder="Currency"
-                    className="border rounded-lg px-3 py-2 text-sm w-24"
-                />
+                    onChange={(e) => setCurrency(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+                >
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="JPY">JPY</option>
+                </select>
                 <button
                     disabled={saving || !name}
-                    className="rounded-lg px-3 py-2 border text-sm hover:bg-gray-50 disabled:opacity-50"
+                    className="rounded-lg bg-blue-600 text-white px-4 py-2 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition"
                 >
-                    {saving ? "Creating..." : "Create"}
+                    {saving ? "Creating..." : "Create Account"}
                 </button>
             </form>
 
-            {isLoading && <div className="text-sm text-gray-500">Loading...</div>}
-            {error && <div className="text-sm text-red-600">Failed to load accounts</div>}
+            {/* Loading / Error States */}
+            {isLoading && (
+                <div className="text-sm text-gray-500">Loading accounts...</div>
+            )}
+            {error && (
+                <div className="text-sm text-red-600">
+                    Failed to load accounts. Please try again.
+                </div>
+            )}
 
-            <ul className="space-y-2">
-                {data?.map((a) => (
-                    <li key={a.id} className="border rounded-lg p-3">
-                        <div className="font-medium">{a.name}</div>
-                        <div className="text-xs text-gray-600">
-                            {a.currency} • Created {new Date(a.created_at).toLocaleString()}
-                        </div>
-                    </li>
-                ))}
-            </ul>
+            {/* Accounts List */}
+            {data && data.length > 0 ? (
+                <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {data.map((a) => (
+                        <li
+                            key={a.id}
+                            className="rounded-xl border bg-white p-5 shadow-sm hover:shadow-md transition"
+                        >
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-lg font-semibold">{a.name}</h2>
+                                <span className="text-sm text-gray-500">{a.currency}</span>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-1">
+                                Created {new Date(a.created_at).toLocaleDateString()}
+                            </p>
+                            <div className="mt-4">
+                                <Link href={`/dashboard/accounts/${a.id}`} passHref>
+                                    <button className="rounded-lg px-3 py-1 border text-sm text-blue-600 hover:bg-gray-50">
+                                        View Transactions
+                                    </button>
+                                </Link>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                !isLoading && (
+                    <div className="text-sm text-gray-500">
+                        No accounts yet. Create your first one above.
+                    </div>
+                )
+            )}
         </main>
     );
 }

@@ -7,8 +7,8 @@ export default async function SiteHeader() {
     const user = userId ? await currentUser() : null;
 
     return (
-        <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b">
-            <div className="flex items-center justify-between px-6 py-4 border-b bg-black">
+        <header className="sticky top-0 z-50 backdrop-blur border-b">
+            <div className="flex items-center justify-between px-6 py-4 border-b">
                 <Link href="/" className="text-base font-semibold">
                     🏦 Banksy
                 </Link>
