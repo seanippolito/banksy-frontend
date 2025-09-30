@@ -9,6 +9,7 @@ type Account = {
     id: number;
     name: string;
     currency: string;
+    created_at: string;
 };
 
 type MoneyTransfer = {
@@ -166,16 +167,38 @@ export default function MoneyTransferPage() {
                 </button>
             </form>
 
-            {/* Account List for context */}
+            {/* Accounts */}
             <section>
                 <h2 className="text-lg font-medium mb-3">Your Accounts</h2>
                 {isLoading && <p className="text-sm text-gray-500">Loading accounts…</p>}
-                {error && <p className="text-sm text-red-600">Failed to load accounts.</p>}
-                <ul className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+                {error && (
+                    <p className="text-sm text-red-600">Failed to load accounts.</p>
+                )}
+                {accounts?.length === 0 && (
+                    <p className="text-sm text-gray-500">
+                        You don’t have any accounts yet.
+                    </p>
+                )}
+
+                <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {accounts?.map((a) => (
-                        <li key={a.id} className="border rounded-lg p-3 bg-white shadow-sm">
-                            <div className="font-medium">{a.name}</div>
-                            <div className="text-xs text-gray-600">{a.currency}</div>
+                        <li
+                            key={a.id}
+                            className="border rounded-xl p-4 shadow-sm bg-white flex flex-col justify-between"
+                        >
+                            <div>
+                                <div className="font-medium">{a.name}</div>
+                                <div className="text-sm text-gray-600">
+                                    {a.currency} • Created{" "}
+                                    {new Date(a.created_at).toLocaleDateString()}
+                                </div>
+                            </div>
+                            <Link
+                                href={`/dashboard/accounts/${a.id}`}
+                                className="mt-3 text-sm text-blue-600 hover:underline"
+                            >
+                                View Transactions →
+                            </Link>
                         </li>
                     ))}
                 </ul>
