@@ -21,6 +21,9 @@ export default function CustomUserMenu() {
                         src={user?.imageUrl ?? "/avatar.svg"}
                         alt="Profile"
                         className="h-8 w-8 rounded-full"
+                        width={32}
+                        height={32}
+                        objectFit="cover"
                     />
                 </button>
 

@@ -92,6 +92,9 @@ export default function DashboardPage() {
                         src={user.imageUrl}
                         alt="avatar"
                         className="w-16 h-16 rounded-full border"
+                        width={128}
+                        height={128}
+                        objectFit="cover"
                     />
                     <div>
                         <div className="font-medium">{user.fullName}</div>
