@@ -27,8 +27,8 @@ export default function ErrorReportingPage() {
                 <h1 className="text-2xl font-semibold">Error Reporting</h1>
             </div>
 
-            {isLoading && <div className="text-sm text-gray-500">Loading errors…</div>}
-            {error && <div className="text-sm text-red-600">Failed to load errors</div>}
+            {isLoading && <div className="text-sm text-muted">Loading errors…</div>}
+            {error && <div className="text-sm text-danger">Failed to load errors</div>}
 
             <ul className="space-y-4">
                 {data?.map((err) => (
@@ -45,10 +45,10 @@ function ErrorCard({ log }: { log: ErrorLog }) {
     const shortStack = log.message.split("\n").slice(-5).join("\n");
 
     return (
-        <li className="border rounded-xl p-4 shadow-sm hover:shadow-md transition bg-white">
+        <li className="border rounded-xl p-4 shadow-sm hover:shadow-md transition card">
             <div className="flex justify-between items-center">
                 <div>
-                    <div className="font-medium text-rose-600">
+                    <div className="font-medium text-danger">
                         {log.error_code || "Unknown Error"}
                     </div>
                     <div className="text-xs text-gray-500">
@@ -56,18 +56,18 @@ function ErrorCard({ log }: { log: ErrorLog }) {
                         {log.user_id ?? "N/A"}
                     </div>
                     {log.location && (
-                        <div className="text-xs text-gray-400">at {log.location}</div>
+                        <div className="text-xs text-highlight">at {log.location}</div>
                     )}
                 </div>
             </div>
 
-            <pre className="mt-3 text-xs bg-gray-50 p-3 rounded-lg overflow-x-auto max-h-40">
+            <pre className="mt-3 text-xs text-accent p-3 rounded-lg overflow-x-auto max-h-40">
         {expanded ? log.message : shortStack}
       </pre>
 
             <button
                 onClick={() => setExpanded(!expanded)}
-                className="mt-2 text-xs text-blue-600 hover:underline"
+                className="mt-2 text-xs hover:underline"
             >
                 {expanded ? "Show less" : "Show full stacktrace"}
             </button>

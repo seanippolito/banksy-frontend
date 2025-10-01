@@ -73,7 +73,7 @@ export default function TransactionsContent() {
                 <h1 className="text-3xl font-bold tracking-tight">Transactions</h1>
                 <Link
                     href="/dashboard"
-                    className="text-sm font-medium text-blue-600 hover:underline"
+                    className="text-sm font-medium hover:underline"
                 >
                     Back to Dashboard
                 </Link>
@@ -83,7 +83,7 @@ export default function TransactionsContent() {
             <div className="flex gap-3 items-center">
                 <label className="text-sm font-medium">Account:</label>
                 <select
-                    className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+                    className="border border-secondary text-highlight rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
                     value={accountId ?? ""}
                     onChange={(e) =>
                         setAccountId(e.target.value ? Number(e.target.value) : null)
@@ -100,9 +100,9 @@ export default function TransactionsContent() {
 
             {/* Account Info */}
             {currentAccount && (
-                <div className="p-4 border rounded-lg bg-gray-50">
+                <div className="p-4 border rounded-lg card">
                     <h2 className="text-lg font-semibold">{currentAccount.name}</h2>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-highlight">
                         Currency: {currentAccount.currency}
                     </p>
                 </div>
@@ -112,10 +112,10 @@ export default function TransactionsContent() {
             {accountId && (
                 <form
                     onSubmit={submit}
-                    className="p-4 border rounded-lg bg-white shadow-sm flex flex-wrap gap-3 items-center"
+                    className="p-4 border rounded-lg shadow-sm flex flex-wrap gap-3 items-center"
                 >
                     <select
-                        className="border rounded-lg px-3 py-2 text-sm"
+                        className="border border-secondary text-highlight rounded-lg px-3 py-2 text-sm"
                         value={type}
                         onChange={(e) => setType(e.target.value as "DEBIT" | "CREDIT")}
                     >
@@ -137,8 +137,8 @@ export default function TransactionsContent() {
                         onChange={(e) => setDesc(e.target.value)}
                     />
                     <button
-                        disabled={!accountId || saving}
-                        className="rounded-lg bg-blue-600 text-white px-4 py-2 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition"
+                        disabled={!accountId || !amount || !desc || saving}
+                        className="rounded-lg btn-accent px-4 py-2 text-sm font-medium disabled:opacity-50 transition"
                     >
                         {saving ? "Adding..." : "Add Transaction"}
                     </button>
@@ -154,7 +154,7 @@ export default function TransactionsContent() {
             {txs && txs.length > 0 && (
                 <div className="overflow-x-auto border rounded-lg shadow-sm">
                     <table className="min-w-full text-sm">
-                        <thead className="bg-gray-50 text-left text-gray-600">
+                        <thead className="bg-muted text-left text-gray-600">
                         <tr>
                             <th className="px-4 py-2">Date</th>
                             <th className="px-4 py-2">Description</th>
@@ -165,26 +165,30 @@ export default function TransactionsContent() {
                         <tbody>
                         {txs.map((tx) => (
                             <tr key={tx.id} className="border-t">
-                                <td className="px-4 py-2">
+                                <td className="px-4 py-2 text-highlight">
                                     {new Date(tx.created_at).toLocaleString()}
                                 </td>
-                                <td className="px-4 py-2">
+                                <td className="px-4 py-2 text-muted">
                                     {tx.description || (
                                         <span className="text-gray-400">No description</span>
                                     )}
                                 </td>
                                 <td className="px-4 py-2">
-                    <span
-                        className={`px-2 py-1 rounded text-xs font-medium ${
-                            tx.type === "CREDIT"
-                                ? "bg-emerald-100 text-emerald-700"
-                                : "bg-rose-100 text-rose-700"
-                        }`}
-                    >
-                      {tx.type}
-                    </span>
+                                    <span
+                                        className={`px-2 py-1 rounded text-xs font-medium ${
+                                            tx.type === "CREDIT"
+                                                ? "bg-emerald-100 text-emerald-700"
+                                                : "bg-rose-100 text-rose-700"
+                                        }`}
+                                    >
+                                      {tx.type}
+                                    </span>
                                 </td>
-                                <td className="px-4 py-2 text-right font-medium">
+                                <td className={`px-4 py-2 text-right font-medium ${
+                                    tx.type === "CREDIT"
+                                        ? "text-emerald-700"
+                                        : "text-rose-700"
+                                }`}>
                                     {tx.type === "CREDIT" ? "+" : "-"} $
                                     {(tx.amount / 100).toFixed(2)}
                                 </td>

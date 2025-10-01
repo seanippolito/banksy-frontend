@@ -55,28 +55,28 @@ export default function DashboardPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                     <Link
                         href="/dashboard/accounts"
-                        className="p-4 rounded-xl border shadow-sm bg-white hover:bg-gray-50 flex flex-col items-center text-center space-y-2"
+                        className="card p-4 rounded-xl border shadow-sm hover:bg-gray-50 flex flex-col items-center text-center space-y-2"
                     >
                         <span className="text-2xl">🏦</span>
                         <span className="text-sm font-medium">Create Account</span>
                     </Link>
                     <Link
                         href="/money-transfer"
-                        className="p-4 rounded-xl border shadow-sm bg-white hover:bg-gray-50 flex flex-col items-center text-center space-y-2"
+                        className="p-4 rounded-xl border shadow-sm card hover:bg-gray-50 flex flex-col items-center text-center space-y-2"
                     >
                         <span className="text-2xl">💸</span>
                         <span className="text-sm font-medium">Money Transfer</span>
                     </Link>
                     <Link
                         href="/dashboard/transactions"
-                        className="p-4 rounded-xl border shadow-sm bg-white hover:bg-gray-50 flex flex-col items-center text-center space-y-2"
+                        className="p-4 rounded-xl border shadow-sm card hover:bg-gray-50 flex flex-col items-center text-center space-y-2"
                     >
                         <span className="text-2xl">📑</span>
                         <span className="text-sm font-medium">View Transactions</span>
                     </Link>
                     <Link
                         href="/dashboard/error-reporting"
-                        className="p-4 rounded-xl border shadow-sm bg-white hover:bg-gray-50 flex flex-col items-center text-center space-y-2"
+                        className="p-4 rounded-xl border shadow-sm card hover:bg-gray-50 flex flex-col items-center text-center space-y-2"
                     >
                         <span className="text-2xl">⚠️</span>
                         <span className="text-sm font-medium">Error Logs</span>
@@ -87,7 +87,7 @@ export default function DashboardPage() {
             {/* Profile */}
             <section>
                 <h2 className="text-lg font-medium mb-3">Your Profile</h2>
-                <div className="border rounded-xl p-4 bg-white shadow-sm flex items-center gap-4">
+                <div className="border rounded-xl p-4 card shadow-sm flex items-center gap-4">
                     <Image
                         src={user.imageUrl}
                         alt="avatar"
@@ -126,7 +126,7 @@ export default function DashboardPage() {
                     {accounts?.map((a) => (
                         <li
                             key={a.id}
-                            className="border rounded-xl p-4 shadow-sm bg-white flex flex-col justify-between"
+                            className="border rounded-xl p-4 shadow-sm card flex flex-col justify-between"
                         >
                             <div>
                                 <div className="font-medium">{a.name}</div>

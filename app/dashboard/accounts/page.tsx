@@ -52,7 +52,7 @@ export default function AccountsPage() {
                 <h1 className="text-3xl font-bold tracking-tight">Accounts</h1>
                 <Link
                     href="/dashboard"
-                    className="text-sm font-medium text-blue-600 hover:underline"
+                    className="text-sm font-medium hover:underline"
                 >
                     Back to Dashboard
                 </Link>
@@ -61,18 +61,18 @@ export default function AccountsPage() {
             {/* Create Account Form */}
             <form
                 onSubmit={onCreate}
-                className="flex flex-wrap items-center gap-3 bg-gray-50 p-4 rounded-lg border"
+                className="flex flex-wrap items-center gap-3 foreground p-4 rounded-lg border"
             >
                 <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Account name"
-                    className="flex-1 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 border border-secondary rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
                 />
                 <select
                     value={currency}
                     onChange={(e) => setCurrency(e.target.value)}
-                    className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+                    className="border border-secondary rounded-lg px-3 py-2 text-sm text-highlight focus:ring-2 focus:ring-blue-500"
                 >
                     <option value="USD">USD</option>
                     <option value="EUR">EUR</option>
@@ -81,7 +81,7 @@ export default function AccountsPage() {
                 </select>
                 <button
                     disabled={saving || !name}
-                    className="rounded-lg bg-blue-600 text-white px-4 py-2 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition"
+                    className="rounded-lg btn-accent text-highlight px-4 py-2 text-sm font-medium disabled:opacity-50 transition"
                 >
                     {saving ? "Creating..." : "Create Account"}
                 </button>
@@ -103,18 +103,18 @@ export default function AccountsPage() {
                     {data.map((a) => (
                         <li
                             key={a.id}
-                            className="rounded-xl border bg-white p-5 shadow-sm hover:shadow-md transition"
+                            className="rounded-xl border card p-5 shadow-sm hover:shadow-md transition"
                         >
                             <div className="flex justify-between items-center">
                                 <h2 className="text-lg font-semibold">{a.name}</h2>
-                                <span className="text-sm text-gray-500">{a.currency}</span>
+                                <span className="text-sm text-highlight">{a.currency}</span>
                             </div>
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-muted mt-1">
                                 Created {new Date(a.created_at).toLocaleDateString()}
                             </p>
                             <div className="mt-4">
                                 <Link href={`/dashboard/accounts/${a.id}`} passHref>
-                                    <button className="rounded-lg px-3 py-1 border text-sm text-blue-600 hover:bg-gray-50">
+                                    <button className="rounded-lg px-3 py-1 border text-sm btn-accent">
                                         View Transactions
                                     </button>
                                 </Link>

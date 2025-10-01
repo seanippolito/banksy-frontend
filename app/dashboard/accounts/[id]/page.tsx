@@ -174,14 +174,14 @@ export default function AccountDetailPage() {
                 <div className="flex gap-3 mt-4">
                     <Link
                         href={`/dashboard/statements?account_id=${account?.id}`}
-                        className="rounded-lg border px-4 py-2 text-sm hover:bg-gray-50"
+                        className="rounded-lg border btn-accent px-4 py-2 text-sm hover:bg-gray-50"
                     >
                         View Statements
                     </Link>
                 </div>
                 <Link
                     href="/dashboard/accounts"
-                    className="text-sm font-medium text-blue-600 hover:underline"
+                    className="text-sm font-medium hover:underline"
                 >
                     Back to Accounts
                 </Link>
@@ -189,7 +189,7 @@ export default function AccountDetailPage() {
 
             {/* Account Info */}
             {account && (
-                <div className="border rounded-lg p-4 bg-gray-50">
+                <div className="border rounded-lg p-4 card">
                     <p className="font-medium">
                         {account.name} ({account.currency})
                     </p>
@@ -212,7 +212,7 @@ export default function AccountDetailPage() {
                     <select
                         value={holderType}
                         onChange={(e) => setHolderType(e.target.value)}
-                        className="border rounded-lg px-3 py-2 text-sm"
+                        className="border border-secondary rounded-lg px-3 py-2 text-sm text-highlight"
                     >
                         <option value="PRIMARY">PRIMARY</option>
                         <option value="JOINT">JOINT</option>
@@ -222,7 +222,7 @@ export default function AccountDetailPage() {
                     </select>
                     <button
                         disabled={saving || !userId}
-                        className="rounded-lg px-3 py-2 border text-sm hover:bg-gray-50 disabled:opacity-50"
+                        className="rounded-lg px-3 py-2 border text-sm btn-accent disabled:opacity-50"
                     >
                         {saving ? "Adding…" : "Add Holder"}
                     </button>
@@ -241,7 +241,7 @@ export default function AccountDetailPage() {
                         >
                             <div>
                                 <div className="font-medium">User #{h.user_id}</div>
-                                <div className="text-xs text-gray-600">{h.holder_type}</div>
+                                <div className="text-xs text-highlight">{h.holder_type}</div>
                             </div>
                             <button
                                 onClick={() => onRemoveHolder(h.id)}
@@ -259,7 +259,7 @@ export default function AccountDetailPage() {
                 <button
                     disabled={shipping}
                     onClick={shipCard}
-                    className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                    className="px-3 py-2 btn-accent rounded-lg disabled:opacity-50"
                 >
                     {shipping ? "Shipping…" : "Ship Card"}
                 </button>
@@ -267,16 +267,16 @@ export default function AccountDetailPage() {
 
             <ul className="space-y-3">
                 {cards?.filter((c) => (c.account_id === account?.id)).map((c) => (
-                    <li key={c.id} className="border rounded-lg p-3 shadow-sm flex justify-between">
+                    <li key={c.id} className="card border rounded-lg p-3 shadow-sm flex justify-between">
                         <div>
                             <div className="font-medium">**** **** **** {c.card_number_last4}</div>
-                            <div className="text-xs text-gray-600">
+                            <div className="text-xs text-danger">
                                 Expires {c.expiration_month}/{c.expiration_year}
                             </div>
                         </div>
                         <div>
-                            <div className="text-xs text-gray-500">{account?.name}</div>
-                            <div className="text-s text-gray-500">{user?.first_name} {user?.last_name}</div>
+                            <div className="text-xs text-muted">{account?.name}</div>
+                            <div className="text-s text-highlight">{user?.first_name} {user?.last_name}</div>
                         </div>
                     </li>
                 ))}
@@ -288,10 +288,10 @@ export default function AccountDetailPage() {
             {/* Add Transaction Form */}
             <form
                 onSubmit={submit}
-                className="bg-white border rounded-lg shadow-sm p-4 flex flex-wrap gap-3 items-center"
+                className="border rounded-lg shadow-sm p-4 flex flex-wrap gap-3 items-center"
             >
                 <select
-                    className="border rounded-lg px-3 py-2 text-sm"
+                    className="border border-secondary rounded-lg px-3 py-2 text-sm text-highlight"
                     value={type}
                     onChange={(e) => setType(e.target.value as "DEBIT" | "CREDIT")}
                 >
@@ -314,23 +314,25 @@ export default function AccountDetailPage() {
                 />
                 <button
                     disabled={!amount}
-                    className="rounded-lg bg-blue-600 text-white px-4 py-2 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition"
+                    className="rounded-lg btn-accent text-white px-4 py-2 text-sm font-medium disabled:opacity-50 transition"
                 >
                     Add Transaction
                 </button>
             </form>
 
             {/* Transactions */}
-            {isLoading && <div className="text-sm text-gray-500">Loading…</div>}
+            {isLoading && <div className="text-sm text-muted">Loading…</div>}
             {txs && txs.length === 0 && (
-                <div className="text-sm text-gray-500">No transactions yet.</div>
+                <div className="text-sm text-muted">No transactions yet.</div>
             )}
 
-            <ul className="space-y-3">
+            <ul className="space-y-1">
                 {txs?.map((tx) => (
                     <li
                         key={tx.id}
-                        className="flex justify-between items-center border rounded-lg p-4 bg-white shadow-sm"
+                        className={`flex justify-between items-center p-4 rounded-lg
+                        ${tx.type === "CREDIT" ? "bg-accent dark:bg-slate-900 hover:bg-accent-purple/10 transition-colors text-accent" : "bg-accent dark:bg-slate-800 hover:bg-accent-purple/10 transition-colors text-danger"}
+                        shadow-sm`}
                     >
                         <div>
                             <p className="text-sm font-medium">
@@ -344,9 +346,7 @@ export default function AccountDetailPage() {
                         </div>
                         <div className="text-right">
                             <p
-                                className={`font-semibold ${
-                                    tx.type === "CREDIT" ? "text-emerald-600" : "text-rose-600"
-                                }`}
+                                className="font-semibold"
                             >
                                 {tx.type === "CREDIT" ? "+" : "-"} ${(tx.amount / 100).toFixed(2)}
                             </p>

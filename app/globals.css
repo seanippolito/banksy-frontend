@@ -1,27 +1,119 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* LIGHT MODE — fresh, neon */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f9fafb;   /* subtle slate-tinted background */
+  --foreground: #111827;   /* deep slate text */
+  --card-bg: #ffffff;      /* pure white cards */
+  --border: #e5e7eb;       /* gray-200 borders */
+
+  --accent: #00e676;       /* neon emerald */
+  --accent-hover: #00c853; /* darker neon emerald */
+  --secondary: #3b82f6;    /* neon sky blue */
+  --secondary-hover: #2563eb;
+  --highlight: #ec4899;    /* hot pink highlight */
+  --danger: #ff1744;       /* neon red */
+
+  --muted: #6b7280;        /* gray-500 for subdued text */
+
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+}
+
+/* DARK MODE — elegant, modern */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f1f45;    /* slate-900 */
+    --foreground: #5ea1ef;    /* gray-50 */
+    --card-bg: #1e293b;       /* slate-800 */
+    --border: #334155;        /* slate-700 */
+
+    --accent: #34d399;        /* emerald-400 */
+    --accent-hover: #10b981;  /* emerald-500 */
+    --secondary: #60a5fa;     /* sky-400 */
+    --secondary-hover: #3b82f6;
+    --highlight: #f472b6;     /* pink-400 */
+    --danger: #f87171;        /* rose-400 */
+
+    --muted: #94a3b8;         /* gray-400 */
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-card: var(--card-bg);
+  --color-border: var(--border);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0e0606;
-    --foreground: #517cbf;
-  }
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-highlight: var(--highlight);
+  --color-danger: var(--danger);
+  --color-muted: var(--muted);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Utility classes */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: #000;
+}
+.btn-accent:hover {
+  background: var(--accent-hover);
+  color: #fff;
+}
+
+.btn-secondary {
+  background: var(--secondary);
+  color: #fff;
+}
+.btn-secondary:hover {
+  background: var(--secondary-hover);
+}
+
+.btn-highlight {
+  background: var(--highlight);
+  color: white;
+}
+.btn-highlight:hover {
+  opacity: 0.9;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+.btn-danger:hover {
+  opacity: 0.9;
 }

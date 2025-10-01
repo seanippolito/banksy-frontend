@@ -51,7 +51,7 @@ export default function StatementsContent() {
         <main className="p-6 space-y-6">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-semibold">Statements</h1>
-                <Link href="/dashboard" className="text-sm underline">
+                <Link href="/dashboard" className="text-sm hover:underline">
                     Back to Dashboard
                 </Link>
             </div>
@@ -63,7 +63,7 @@ export default function StatementsContent() {
                         type="date"
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
-                        className="border rounded-lg px-3 py-2 text-sm"
+                        className="border border-secondary rounded-lg px-3 py-2 text-sm text-highlight"
                     />
                 </div>
                 <div>
@@ -72,12 +72,12 @@ export default function StatementsContent() {
                         type="date"
                         value={endDate}
                         onChange={(e) => setEndDate(e.target.value)}
-                        className="border rounded-lg px-3 py-2 text-sm"
+                        className="border border-secondary rounded-lg px-3 py-2 text-sm text-highlight"
                     />
                 </div>
                 <button
                     disabled={!startDate || !endDate || loading}
-                    className="rounded-lg px-4 py-2 border text-sm hover:bg-gray-50 disabled:opacity-50"
+                    className="rounded-lg translate-y-2.5 y-5 px-4 py-2 border text-sm btn-accent disabled:opacity-50"
                 >
                     {loading ? "Generating…" : "Generate"}
                 </button>
@@ -90,7 +90,7 @@ export default function StatementsContent() {
             {statements?.map((s) => (
                 <div
                     key={s.account_id}
-                    className={`border rounded-lg p-4 space-y-3 bg-white shadow-sm ${
+                    className={`card border rounded-lg p-4 space-y-3 shadow-sm ${
                         preselectedAccountId === String(s.account_id)
                             ? "ring-2 ring-emerald-500"
                             : ""
