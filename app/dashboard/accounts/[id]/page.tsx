@@ -331,7 +331,8 @@ export default function AccountDetailPage() {
                     <li
                         key={tx.id}
                         className={`flex justify-between items-center p-4 rounded-lg
-                        ${tx.type === "CREDIT" ? "bg-accent dark:bg-slate-900 hover:bg-accent-purple/10 transition-colors text-accent" : "bg-accent dark:bg-slate-800 hover:bg-accent-purple/10 transition-colors text-danger"}
+                        ${tx.type === "CREDIT" ? "dark:bg-slate-900 hover:bg-accent-purple/10 transition-colors text-accent" :
+                            "bg-card dark:bg-slate-800 hover:bg-accent-purple/10 transition-colors text-danger"}
                         shadow-sm`}
                     >
                         <div>

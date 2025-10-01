@@ -47,7 +47,7 @@ export default function DashboardPage() {
 
     return (
         <main className="min-h-screen p-6 space-y-10">
-            <p className="text-sm text-gray-600">Welcome back, {user.firstName}!</p>
+            <p className="text-lg text-highlight">Welcome back, {user.firstName}!</p>
 
             {/* Quick Actions */}
             <section>
@@ -87,7 +87,7 @@ export default function DashboardPage() {
             {/* Profile */}
             <section>
                 <h2 className="text-lg font-medium mb-3">Your Profile</h2>
-                <div className="border rounded-xl p-4 card shadow-sm flex items-center gap-4">
+                <div className="card border rounded-xl p-4 shadow-sm flex items-center gap-4">
                     <Image
                         src={user.imageUrl}
                         alt="avatar"
@@ -98,10 +98,10 @@ export default function DashboardPage() {
                     />
                     <div>
                         <div className="font-medium">{user.fullName}</div>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-muted">
                             {user.primaryEmailAddress?.emailAddress}
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-muted">
                             Member since{" "}
                             {new Date(user.createdAt ?? "").toLocaleDateString()}
                         </div>
@@ -112,12 +112,12 @@ export default function DashboardPage() {
             {/* Accounts */}
             <section>
                 <h2 className="text-lg font-medium mb-3">Your Accounts</h2>
-                {isLoading && <p className="text-sm text-gray-500">Loading accounts…</p>}
+                {isLoading && <p className="text-sm text-muted">Loading accounts…</p>}
                 {error && (
                     <p className="text-sm text-red-600">Failed to load accounts.</p>
                 )}
                 {accounts?.length === 0 && (
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted">
                         You don’t have any accounts yet.
                     </p>
                 )}
@@ -130,7 +130,7 @@ export default function DashboardPage() {
                         >
                             <div>
                                 <div className="font-medium">{a.name}</div>
-                                <div className="text-sm text-gray-600">
+                                <div className="text-sm text-muted">
                                     {a.currency} • Created{" "}
                                     {new Date(a.created_at).toLocaleDateString()}
                                 </div>

@@ -89,7 +89,7 @@ export default function MoneyTransferPage() {
         <main className="p-6 space-y-8">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-semibold">Start a Money Transfer</h1>
-                <Link href="/dashboard" className="text-sm underline">
+                <Link href="/dashboard" className="text-sm hover:underline">
                     Back to Dashboard
                 </Link>
             </div>
@@ -99,7 +99,7 @@ export default function MoneyTransferPage() {
                 <div>
                     <label className="block text-sm mb-1">Sender Account</label>
                     <select
-                        className="border rounded-lg px-3 py-2 text-sm w-full"
+                        className="border border-secondary text-highlight rounded-lg px-3 py-2 text-sm w-full"
                         value={sender}
                         onChange={(e) => setSender(e.target.value ? Number(e.target.value) : "")}
                     >
@@ -115,7 +115,7 @@ export default function MoneyTransferPage() {
                 <div>
                     <label className="block text-sm mb-1">Recipient Account</label>
                     <select
-                        className="border rounded-lg px-3 py-2 text-sm w-full"
+                        className="border border-secondary text-highlight rounded-lg px-3 py-2 text-sm w-full"
                         value={recipient}
                         onChange={(e) =>
                             setRecipient(e.target.value ? Number(e.target.value) : "")
@@ -143,7 +143,7 @@ export default function MoneyTransferPage() {
                 </div>
 
                 <div>
-                    <label className="block text-sm mb-1">Description (optional)</label>
+                    <label className="block text-sm mb-1">Description</label>
                     <input
                         className="border rounded-lg px-3 py-2 text-sm w-full"
                         value={desc}
@@ -160,8 +160,8 @@ export default function MoneyTransferPage() {
                 )}
 
                 <button
-                    disabled={saving}
-                    className="rounded-lg px-4 py-2 bg-blue-600 text-white text-sm hover:bg-blue-700 disabled:opacity-50"
+                    disabled={!desc || !sender || !recipient || !amount || saving}
+                    className="rounded-lg px-4 py-2 btn-accent text-sm disabled:opacity-50"
                 >
                     {saving ? "Transferring…" : "Submit Transfer"}
                 </button>
@@ -184,11 +184,11 @@ export default function MoneyTransferPage() {
                     {accounts?.map((a) => (
                         <li
                             key={a.id}
-                            className="border rounded-xl p-4 shadow-sm bg-white flex flex-col justify-between"
+                            className="card border rounded-xl p-4 shadow-sm bg-white flex flex-col justify-between"
                         >
                             <div>
                                 <div className="font-medium">{a.name}</div>
-                                <div className="text-sm text-gray-600">
+                                <div className="text-sm text-muted">
                                     {a.currency} • Created{" "}
                                     {new Date(a.created_at).toLocaleDateString()}
                                 </div>

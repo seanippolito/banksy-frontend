@@ -5,12 +5,12 @@
 :root {
   --background: #f9fafb;   /* subtle slate-tinted background */
   --foreground: #111827;   /* deep slate text */
-  --card-bg: #ffffff;      /* pure white cards */
+  --card-bg: #fff3f3;      /* pure white cards */
   --border: #e5e7eb;       /* gray-200 borders */
 
-  --accent: #00e676;       /* neon emerald */
+  --accent: #01cc60;       /* neon emerald */
   --accent-hover: #00c853; /* darker neon emerald */
-  --secondary: #3b82f6;    /* neon sky blue */
+  --secondary: #84b6fa;    /* neon sky blue */
   --secondary-hover: #2563eb;
   --highlight: #ec4899;    /* hot pink highlight */
   --danger: #ff1744;       /* neon red */
